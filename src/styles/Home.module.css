@@ -50,6 +50,12 @@
   text-align: center;
 }
 
+.walletButtons {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 2rem;
+}
+
 .description {
   margin: 4rem 0;
   line-height: 1.5;
