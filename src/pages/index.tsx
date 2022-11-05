@@ -25,7 +25,7 @@ const Home: NextPage = () => {
 
             <main className={styles.main}>
                 <h1 className={styles.title}>
-                    Welcome to <a href="https://nextjs.org">Next.js!</a>
+                    Hey, it's <a>DePay!</a>
                 </h1>
 
                 <div className={styles.walletButtons}>
@@ -33,19 +33,15 @@ const Home: NextPage = () => {
                     <WalletDisconnectButtonDynamic />
                 </div>
 
-                <p className={styles.description}>
-                    Get started by editing <code className={styles.code}>pages/index.tsx</code>
-                </p>
-
                 <div className={styles.grid}>
                     <a href="https://nextjs.org/docs" className={styles.card}>
-                        <h2>Documentation &rarr;</h2>
-                        <p>Find in-depth information about Next.js features and API.</p>
+                        <h2>Learn More &rarr;</h2>
+                        <p>Wanna know moer about DePay? Click here to learn more!</p>
                     </a>
 
                     <a href="https://nextjs.org/learn" className={styles.card}>
                         <h2>Learn &rarr;</h2>
-                        <p>Learn about Next.js in an interactive course with quizzes!</p>
+                        <p>Learn about DePay in an interactive course with quizzes!</p>
                     </a>
 
                     <a href="https://github.com/vercel/next.js/tree/master/examples" className={styles.card}>
