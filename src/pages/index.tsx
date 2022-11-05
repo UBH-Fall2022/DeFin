@@ -2,8 +2,12 @@ import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
-import React from 'react';
+import React, { FC, useCallback } from 'react';
 import styles from '../styles/Home.module.css';
+import { WalletError, WalletNotConnectedError } from '@solana/wallet-adapter-base';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { Keypair, SystemProgram, Transaction } from '@solana/web3.js';
+import Wallet from '@project-serum/sol-wallet-adapter';
 
 const WalletDisconnectButtonDynamic = dynamic(
     async () => (await import('@solana/wallet-adapter-react-ui')).WalletDisconnectButton,
@@ -15,6 +19,8 @@ const WalletMultiButtonDynamic = dynamic(
 );
 
 const Home: NextPage = () => {
+    const wallet = useWallet();
+    if(wallet.connected){
     return (
         <div className={styles.container}>
             <Head>
@@ -72,7 +78,14 @@ const Home: NextPage = () => {
                 </a>
             </footer>
         </div>
-    );
+    );}
+    else {
+        return(
+            <div className={styles.walletButtons}>
+                    <WalletMultiButtonDynamic />
+                </div>
+        )
+    }
 };
 
 export default Home;
