@@ -18,8 +18,35 @@ const WalletMultiButtonDynamic = dynamic(
     { ssr: false }
 );
 
+
 const Home: NextPage = () => {
+    const {connection} = useConnection();
     const wallet = useWallet();
+
+    const onClick = useCallback(async () => {
+        if (!wallet.publicKey) throw new WalletNotConnectedError();
+
+        // 890880 lamports as of 2022-09-01
+        const lamports = await connection.getMinimumBalanceForRentExemption(0);
+
+        const transaction = new Transaction().add(
+            SystemProgram.transfer({
+                fromPubkey: wallet.publicKey,
+                toPubkey: Keypair.generate().publicKey,
+                lamports,
+            })
+        );
+
+        const {
+            context: { slot: minContextSlot },
+            value: { blockhash, lastValidBlockHeight }
+        } = await connection.getLatestBlockhashAndContext();
+
+        const signature = await wallet.sendTransaction(transaction, connection, { minContextSlot });
+
+        await connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature });
+    }, [wallet.publicKey, wallet.sendTransaction, connection]);
+
     if(wallet.connected){
     return (
         <div className={styles.container}>
@@ -31,12 +58,16 @@ const Home: NextPage = () => {
 
             <main className={styles.main}>
                 <h1 className={styles.title}>
-                    Hey, it's <a>DePay!</a>
+                    Hey, it's <a>DePay!</a> {}
                 </h1>
 
                 <div className={styles.walletButtons}>
-                    <WalletMultiButtonDynamic />
                     <WalletDisconnectButtonDynamic />
+                </div>
+                <div>
+                <button onClick={onClick} disabled={!wallet.publicKey}>
+            Send SOL to a random address!
+        </button>
                 </div>
 
                 <div className={styles.grid}>
@@ -80,6 +111,7 @@ const Home: NextPage = () => {
         </div>
     );}
     else {
+        //Wallet Not Connected
         return(
             <div className={styles.walletButtons}>
                     <WalletMultiButtonDynamic />
