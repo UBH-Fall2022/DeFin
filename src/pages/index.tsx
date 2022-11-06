@@ -2,8 +2,12 @@ import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
-import React from 'react';
+import React, { FC, useCallback } from 'react';
 import styles from '../styles/Home.module.css';
+import { WalletError, WalletNotConnectedError } from '@solana/wallet-adapter-base';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { Keypair, SystemProgram, Transaction, PublicKey } from '@solana/web3.js';
+import Wallet from '@project-serum/sol-wallet-adapter';
 
 const WalletDisconnectButtonDynamic = dynamic(
     async () => (await import('@solana/wallet-adapter-react-ui')).WalletDisconnectButton,
@@ -14,7 +18,37 @@ const WalletMultiButtonDynamic = dynamic(
     { ssr: false }
 );
 
+
 const Home: NextPage = () => {
+    const {connection} = useConnection();
+    const wallet = useWallet();
+
+    const onClick = useCallback(async () => {
+        if (!wallet.publicKey) throw new WalletNotConnectedError();
+
+        // 890880 lamports as of 2022-09-01
+        const lamports:number = Math.floor(Number(parseFloat((document.getElementById('Amount') as HTMLInputElement).value)*890880));
+        const pub = new PublicKey((document.getElementById('Sender') as HTMLInputElement).value);
+
+        const transaction = new Transaction().add(
+            SystemProgram.transfer({
+                fromPubkey: wallet.publicKey,
+                toPubkey: pub,
+                lamports,
+            })
+        );
+
+        const {
+            context: { slot: minContextSlot },
+            value: { blockhash, lastValidBlockHeight }
+        } = await connection.getLatestBlockhashAndContext();
+
+        const signature = await wallet.sendTransaction(transaction, connection, { minContextSlot });
+
+        await connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature });
+    }, [wallet.publicKey, wallet.sendTransaction, connection]);
+
+    if(wallet.connected){
     return (
         <div className={styles.container}>
             <Head>
@@ -25,12 +59,21 @@ const Home: NextPage = () => {
 
             <main className={styles.main}>
                 <h1 className={styles.title}>
-                    Hey, it's <a>DePay!</a>
+                    Hey, it's <a>DePay!</a> {}
                 </h1>
 
                 <div className={styles.walletButtons}>
-                    <WalletMultiButtonDynamic />
                     <WalletDisconnectButtonDynamic />
+                </div>
+                <div>
+                    <input type="text" placeholder="Who Are You Sending To?" id="Sender"></input>
+                    <input type="text" placeholder="How Much You Sendin?" id="Amount"></input>
+                    <button onClick={onClick} disabled={!wallet.publicKey}>
+                        Send SOL to a random address!
+                    </button>
+                </div>
+                <div>
+                    {wallet.publicKey && <p>Public Key: {wallet.publicKey.toBase58()}</p>}
                 </div>
 
                 <div className={styles.grid}>
@@ -72,7 +115,15 @@ const Home: NextPage = () => {
                 </a>
             </footer>
         </div>
-    );
+    );}
+    else {
+        //Wallet Not Connected
+        return(
+            <div className={styles.walletButtons}>
+                    <WalletMultiButtonDynamic />
+                </div>
+        )
+    }
 };
 
 export default Home;
