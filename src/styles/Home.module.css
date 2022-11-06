@@ -121,9 +121,10 @@
 }
 
 .MoneySender {
-}
-.input {
-  padding: 2rem;
+  margin: auto;
+  display: inline-block;
+  line-height: normal;
+  vertical-align: middle;
 }
 
 @media (max-width: 600px) {

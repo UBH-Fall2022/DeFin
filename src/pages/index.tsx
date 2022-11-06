@@ -119,71 +119,40 @@ const Home: NextPage = () => {
                 <div className={styles.walletButtons}>
                     <WalletDisconnectButtonDynamic />
                 </div>
-                <Spacer y={4} />
-                <div className = "MoneySender">
-                    <Input className="input" type="text" placeholder="Who Are You Sending To?" id="Sender"></Input>
-                    <Spacer y={4} />
-                    <Input className = "input" type="text" 
+                <Spacer y={1} />
+                <div className = {styles.MoneySender}>
+                    <Input className={styles.input} type="text" 
+                    placeholder="Who Are You Sending To?" 
+                    id="Sender" 
+                    bordered
+                    color="secondary" 
+                    width="500px"></Input>
+                    <Spacer y={1} />
+                    <Input className = {styles.input} type="text" 
                     placeholder="How Much You Sendin?" 
                     id="Amount" 
                     bordered
                     color="secondary"
+                    width="500px"
                     >
                     </Input>
-                    <Spacer y={4} />
+                    <Spacer y={1} />
                     <Button onClick={onClick} disabled={!wallet.publicKey}>
                         Send SOL!
                     </Button>
-                    <Spacer y={4} />
+                    <Spacer y={1} />
                 </div>
                 <div>
                     {wallet.publicKey && <p>Public Key: {wallet.publicKey.toBase58()}</p>}
                 </div>
 
-                <div className={styles.grid}>
-                    <a href="https://nextjs.org/docs" className={styles.card}>
-                        <h2>Learn More &rarr;</h2>
-                        <p>Wanna know moer about DePay? Click here to learn more!</p>
-                    </a>
-
-                    <a href="https://nextjs.org/learn" className={styles.card}>
-                        <h2>Learn &rarr;</h2>
-                        <p>Learn about DePay in an interactive course with quizzes!</p>
-                    </a>
-
-                    <a href="https://github.com/vercel/next.js/tree/master/examples" className={styles.card}>
-                        <h2>Examples &rarr;</h2>
-                        <p>Discover and deploy boilerplate example Next.js projects.</p>
-                    </a>
-
-                    <a
-                        href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-                        className={styles.card}
-                    >
-                        <h2>Deploy &rarr;</h2>
-                        <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
-                    </a>
-                </div>
             </main>
-
-            <footer className={styles.footer}>
-                <a
-                    href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Powered by{' '}
-                    <span className={styles.logo}>
-                        <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-                    </span>
-                </a>
-            </footer>
         </div>
     );}
     else {
         //Wallet Not Connected
         return(
-            <main>
+            <main className={styles.main}>
                 <div className={styles.walletButtons}>
                 <WalletMultiButtonDynamic />
             </div>
