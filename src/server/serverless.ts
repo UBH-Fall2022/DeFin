@@ -1,6 +1,6 @@
-import express from "express";
+//import express from "express";
 
-import { Pool } from 'pg';
+import { Pool, Client } from 'pg';
 
 
 // breaking apart the url to the cockroach serverless
@@ -42,7 +42,11 @@ const pool = new Pool({
     connectionString,
 })
 
-
+pool.query('SELECT version()', (err, res) => {
+    console.log(err, res)
+    pool.end()
+  })
+/*
 const app = express()
 const port = 3003
 // const port = 26257
@@ -72,4 +76,5 @@ const client = new Client(process.env.DATABASE_URL)
 
 client.connect()
 
-client.query('CREATE TABLE userIDs (user STRING PRIMARY KEY)');
+//client.query('CREATE TABLE userIDs (user STRING PRIMARY KEY)');
+*/
