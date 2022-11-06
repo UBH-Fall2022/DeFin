@@ -6,7 +6,7 @@ import React, { FC, useCallback } from 'react';
 import styles from '../styles/Home.module.css';
 import { WalletError, WalletNotConnectedError } from '@solana/wallet-adapter-base';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { Keypair, SystemProgram, Transaction } from '@solana/web3.js';
+import { Keypair, SystemProgram, Transaction, PublicKey } from '@solana/web3.js';
 import Wallet from '@project-serum/sol-wallet-adapter';
 
 const WalletDisconnectButtonDynamic = dynamic(
@@ -27,12 +27,13 @@ const Home: NextPage = () => {
         if (!wallet.publicKey) throw new WalletNotConnectedError();
 
         // 890880 lamports as of 2022-09-01
-        const lamports = await connection.getMinimumBalanceForRentExemption(0);
+        const lamports:number = Math.floor(Number(parseFloat((document.getElementById('Amount') as HTMLInputElement).value)*890880));
+        const pub = new PublicKey((document.getElementById('Sender') as HTMLInputElement).value);
 
         const transaction = new Transaction().add(
             SystemProgram.transfer({
                 fromPubkey: wallet.publicKey,
-                toPubkey: Keypair.generate().publicKey,
+                toPubkey: pub,
                 lamports,
             })
         );
@@ -65,9 +66,14 @@ const Home: NextPage = () => {
                     <WalletDisconnectButtonDynamic />
                 </div>
                 <div>
-                <button onClick={onClick} disabled={!wallet.publicKey}>
-            Send SOL to a random address!
-        </button>
+                    <input type="text" placeholder="Who Are You Sending To?" id="Sender"></input>
+                    <input type="text" placeholder="How Much You Sendin?" id="Amount"></input>
+                    <button onClick={onClick} disabled={!wallet.publicKey}>
+                        Send SOL to a random address!
+                    </button>
+                </div>
+                <div>
+                    {wallet.publicKey && <p>Public Key: {wallet.publicKey.toBase58()}</p>}
                 </div>
 
                 <div className={styles.grid}>
