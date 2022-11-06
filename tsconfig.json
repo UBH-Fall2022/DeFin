@@ -1,5 +1,5 @@
 {
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/dbs.js"],
     "compilerOptions": {
         "target": "es6",
         "lib": ["dom", "dom.iterable", "esnext"],

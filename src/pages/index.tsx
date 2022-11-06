@@ -10,8 +10,50 @@ import { Keypair, SystemProgram, Transaction, PublicKey } from '@solana/web3.js'
 import Wallet from '@project-serum/sol-wallet-adapter';
 import { Button, Input, Text, Spacer } from "@nextui-org/react";
 
+// import Pool to access node postgresql
+
+import { Client } from 'pg';
+// reading the data from user??
+function storeSender(pub: PublicKey) {
+    const pubKey = pub;
+    const username = process.env.CRDB_USERNAME || 'liansolomon02';
+    const pw = process.env.CRDB_PW|| 'Ci9XJZjU1X-m3Yvil_vfSg';
+    const cluster = process.env.CRDB_CLUSTER || 'crypto-bank-2614';
+    
+    const database = process.env.CRDB_DATABASE  || 'defaultdb'; // database
+    const host     = process.env.CRDB_HOST      || 'free-tier11.gcp-us-east1.cockroachlabs.cloud'; // cluster host
+    
+    // store the url for database inside connectionString
+    const connectionString = 'postgresql://' + // use the postgresql wire protocol
+    username +                       // username
+    ':' +                            // separator between username and pw
+    pw +                       // pw
+    '@' +                            // separator between username/pw and port
+    host +                           // host
+    ':' +                            // separator between host and port
+    '26257' +                        // port, CockroachDB Serverless always uses 26257
+    '/' +                            // separator between port and database
+    database +                       // database
+    '?' +                            // separator for url parameters
+    'sslmode=verify-full' +          // always use verify-full for CockroachDB Serverless
+    '&' +                            // url parameter separator
+    //'sslrootcert=' +      // full path to ca certificate 
+    //'&' +                            // url parameter separator
+    'options=--cluster%3D' + cluster // cluster name is passed via the options url parameter
+    
+    
+    // need to create a function to store the data from users and transactions
+    const client = new Client({connectionString});
+    const createTable = 'CREATE TABLE userIDs (id STRING PRIMARY KEY, name STRING)';
+    client.query(createTable)
+    // create a new user
+    client.query('INSERT INTO userIDs(id) VALUES($1)', [pubKey])
+    const ID = client.query('SELECT * FROM userIDs');
+    console.log(ID);
+}
 
 
+// end of storeSender function
 const WalletDisconnectButtonDynamic = dynamic(
     async () => (await import('@solana/wallet-adapter-react-ui')).WalletDisconnectButton,
     { ssr: false }
@@ -49,12 +91,17 @@ const Home: NextPage = () => {
         const signature = await wallet.sendTransaction(transaction, connection, { minContextSlot });
 
         await connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature });
+<<<<<<< HEAD
 
         //Write a return notification saying payment succesful to Sender
         //
 
         (document.getElementById('Sender') as HTMLInputElement).value = '';
         (document.getElementById('Amount') as HTMLInputElement).value = '';
+=======
+        // hopefully stores the user id
+        storeSender(pub);
+>>>>>>> 6b640b06c00450b5c0bf400b6476a1e4ffac80bc
     }, [wallet.publicKey, wallet.sendTransaction, connection]);
 
     if(wallet.connected){
@@ -121,6 +168,12 @@ const Home: NextPage = () => {
             </main>
         )
     }
+    /*
+    function mapSender(pub: string) {
+        pub = 'helpo me';
+    }
+    */
+   
 };
 
 export default Home;

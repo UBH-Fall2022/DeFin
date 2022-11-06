@@ -1,8 +1,8 @@
 //import express from "express";
 
-import { Pool, Client } from 'pg';
-
-
+//import { Pool } from 'pg';
+const Pool = require('pg').Pool;
+//const { Client } = require('pg');
 // breaking apart the url to the cockroach serverless
 const username = process.env.CRDB_USERNAME || 'liansolomon02';
 const pw = process.env.CRDB_PW|| 'Ci9XJZjU1X-m3Yvil_vfSg';
@@ -25,56 +25,41 @@ const connectionString = 'postgresql://' + // use the postgresql wire protocol
     '?' +                            // separator for url parameters
     'sslmode=verify-full' +          // always use verify-full for CockroachDB Serverless
     '&' +                            // url parameter separator
-    'sslrootcert=' +      // full path to ca certificate 
-    '&' +                            // url parameter separator
+    //'sslrootcert=' +      // full path to ca certificate 
+    //'&' +                            // url parameter separator
     'options=--cluster%3D' + cluster // cluster name is passed via the options url parameter
 
 
 // need to create a function to store the data from users and transactions
+const pool = new Pool({connectionString});
+
+pool.query("CREATE TABLE userIDs (id STRING PRIMARY KEY, name STRING)", (err, res)=> {
+    console.log(err,res);
+    pool.end();
+})
 /*
-function storeUSERID() {
-    //const createTable = 'CREATE TABLE userID'
-}
+const client = new Client({connectionString});
+
+client.connect();
 */
-// create the query
-
-const pool = new Pool({
-    connectionString,
-})
-
-pool.query('SELECT version()', (err, res) => {
-    console.log(err, res)
-    pool.end()
-  })
 /*
-const app = express()
-const port = 3003
-// const port = 26257
-
-//
-// EXECUTE QUERY
-//
-const getVersion = (_request: any, response: any) => {
-  pool.query('SELECT version()', (err: Error, res: any) => {
+client.connect(err => {
     if (err) {
-        throw err
+      console.error('connection error', err.stack)
+    } else {
+      console.log('connected')
     }
-    response.status(200).json(res.rows)
   })
-}
+  */
 
-app.get('/', getVersion)
-
-app.listen(port, () => {
-    console.log(`App running on port ${port}.`)
-})
-
-//const { Client } = require('pg')
-import { Client } from 'pg';
-
-const client = new Client(process.env.DATABASE_URL)
-
-client.connect()
-
-//client.query('CREATE TABLE userIDs (user STRING PRIMARY KEY)');
+/*
+    const pool = new Pool({connectionString});
+    
+    pool.query("CREATE TABLE userIDs (id STRING PRIMARY KEY, name STRING)", (err, res)=> {
+        console.log(err,res);
+        pool.end();
+    })
+    pool.query("INSERT INTO userIDs (id STRING PRIMARY KEY) VALUES ($1)", [pubKey]);
+    const { rows } = await pool.query('SELECT * FROM userIDs')
+    console.log(rows)
 */
