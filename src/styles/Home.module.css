@@ -1,15 +1,20 @@
+.fullmain {
+  background-color: white;
+}
+
 .container {
   padding: 0 2rem;
 }
 
 .main {
-  min-height: 100vh;
-  padding: 4rem 0;
+  max-height: 100vh;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 6rem 0;
+  text-align: center;
 }
 
 .Input {
@@ -121,10 +126,8 @@
 }
 
 .MoneySender {
-  margin: auto;
-  display: inline-block;
-  line-height: normal;
-  vertical-align: middle;
+  display: block;
+  padding: 30px auto;
 }
 
 @media (max-width: 600px) {
