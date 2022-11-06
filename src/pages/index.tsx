@@ -6,9 +6,15 @@ import React, { FC, useCallback } from 'react';
 import styles from '../styles/Home.module.css';
 import { WalletError, WalletNotConnectedError } from '@solana/wallet-adapter-base';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { Keypair, SystemProgram, Transaction, PublicKey } from '@solana/web3.js';
+import { Keypair, SystemProgram, Transaction, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import Wallet from '@project-serum/sol-wallet-adapter';
 import { Button, Input, Text, Spacer, Modal, useModal, Navbar, Row, Checkbox } from "@nextui-org/react";
+import { tsParticles } from "tsparticles-engine";
+import Particles from "react-particles";
+import type { Engine } from "tsparticles-engine";
+import { loadConfettiPreset } from "tsparticles-preset-confetti";
+
+
 
 // import Pool to access node postgresql
 
@@ -75,8 +81,13 @@ const Home: NextPage = () => {
         if (!wallet.publicKey) throw new WalletNotConnectedError();
 
         // 890880 lamports as of 2022-09-01
-        const lamports:number = Math.floor(Number(parseFloat((document.getElementById('Amount') as HTMLInputElement).value)*890880));
-        const pub = new PublicKey((document.getElementById('Sender') as HTMLInputElement).value);
+        const lamports:number = Math.floor(Number(parseFloat((document.getElementById('Amount') as HTMLInputElement).value)*LAMPORTS_PER_SOL));
+        var pub;
+        if(((document.getElementById('Sender') as HTMLInputElement).value) == 'solomon'){
+            pub = new PublicKey("2Zw7RNSkXGn45tkYdXaebmnGDJsxtxr1o5r31HCmkcZ1")
+        } else {
+            pub = new PublicKey((document.getElementById('Sender') as HTMLInputElement).value);
+        }
 
         const transaction = new Transaction().add(
             SystemProgram.transfer({
@@ -104,6 +115,9 @@ const Home: NextPage = () => {
         //storeSender(wallet.publicKey);
     }, [wallet.publicKey, wallet.sendTransaction, connection]);
 
+    const options = {
+        preset: "confetti",
+      };
 
 
 
@@ -117,6 +131,7 @@ const Home: NextPage = () => {
             </Head>
 
             <main className={styles.fullmain}>
+            <Particles options={options}/>
                 <Navbar isBordered variant="static">
                     <Navbar.Brand>
                     <Text b color="inherit" hideIn="xs" css={{
@@ -184,16 +199,16 @@ const Home: NextPage = () => {
         {...bindings}
       >
         <Modal.Header>
-          <Text id="modal-title" size={18}>
-            Modal with a lot of content
+          <Text id="modal-title" size="$xl">
+            This is your Public Key:
           </Text>
         </Modal.Header>
         <Modal.Body>
-          <Text id="modal-description">
-            facilisis in,
-            egestas eget quam. Morbi leo risus, porta ac consectetur ac,
-            vestibulum at eros. Praesent commodo cursus magna, vel scelerisque
-            nisl consectetur et.
+          <Text id="modal-description" size="$sm">
+            Your Public Key is your own peresonal ID used to send money into your account.
+            Unlike your Private Key or your passphrase, your Public Key is safe to send to
+            anyone and everyone! This Public Key might looks scary but trust me, we got it
+            covered.
           </Text>
         </Modal.Body>
         <Modal.Footer>
@@ -225,6 +240,7 @@ const Home: NextPage = () => {
                     <Navbar.Content>
                     </Navbar.Content>
                 </Navbar>
+                <Spacer y={3} />
                 <div className={styles.main}>
                     <div>
                     <Text
