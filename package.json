@@ -33,6 +33,8 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@emotion/react": "^11.10.5",
+        "@nextui-org/react": "^1.0.0-beta.10",
         "@solana/wallet-adapter-base": "^0.9.18",
         "@solana/wallet-adapter-react": "^0.15.22",
         "@solana/wallet-adapter-react-ui": "^0.9.20",

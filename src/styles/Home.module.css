@@ -12,6 +12,12 @@
   align-items: center;
 }
 
+.Input {
+  display: flex;
+  flex: 1;
+  padding: 2rem 0;
+}
+
 .footer {
   display: flex;
   flex: 1;
@@ -51,9 +57,9 @@
 }
 
 .walletButtons {
-    margin-top: 1.5rem;
-    display: flex;
-    gap: 2rem;
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 2rem;
 }
 
 .description {
@@ -112,6 +118,12 @@
 .logo {
   height: 1em;
   margin-left: 0.5rem;
+}
+
+.MoneySender {
+}
+.input {
+  padding: 2rem;
 }
 
 @media (max-width: 600px) {

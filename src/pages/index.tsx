@@ -8,6 +8,8 @@ import { WalletError, WalletNotConnectedError } from '@solana/wallet-adapter-bas
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { Keypair, SystemProgram, Transaction, PublicKey } from '@solana/web3.js';
 import Wallet from '@project-serum/sol-wallet-adapter';
+import { Button, Input, Text, Spacer } from "@nextui-org/react";
+
 
 
 const WalletDisconnectButtonDynamic = dynamic(
@@ -59,19 +61,36 @@ const Home: NextPage = () => {
             </Head>
 
             <main className={styles.main}>
-                <h1 className={styles.title}>
+            <Text
+        h1
+        size={60}
+        css={{
+          textGradient: "45deg, $blue600 -20%, $pink600 50%",
+        }}
+        weight="bold"
+      >
                     Hey, it's <a>DePay!</a> {}
-                </h1>
+                </Text>
 
                 <div className={styles.walletButtons}>
                     <WalletDisconnectButtonDynamic />
                 </div>
-                <div>
-                    <input type="text" placeholder="Who Are You Sending To?" id="Sender"></input>
-                    <input type="text" placeholder="How Much You Sendin?" id="Amount"></input>
-                    <button onClick={onClick} disabled={!wallet.publicKey}>
-                        Send SOL to a random address!
-                    </button>
+                <Spacer y={4} />
+                <div className = "MoneySender">
+                    <Input className="input" type="text" placeholder="Who Are You Sending To?" id="Sender"></Input>
+                    <Spacer y={4} />
+                    <Input className = "input" type="text" 
+                    placeholder="How Much You Sendin?" 
+                    id="Amount" 
+                    bordered
+                    color="secondary"
+                    >
+                    </Input>
+                    <Spacer y={4} />
+                    <Button onClick={onClick} disabled={!wallet.publicKey}>
+                        Send SOL!
+                    </Button>
+                    <Spacer y={4} />
                 </div>
                 <div>
                     {wallet.publicKey && <p>Public Key: {wallet.publicKey.toBase58()}</p>}
@@ -120,9 +139,11 @@ const Home: NextPage = () => {
     else {
         //Wallet Not Connected
         return(
-            <div className={styles.walletButtons}>
-                    <WalletMultiButtonDynamic />
-                </div>
+            <main>
+                <div className={styles.walletButtons}>
+                <WalletMultiButtonDynamic />
+            </div>
+            </main>
         )
     }
 };
