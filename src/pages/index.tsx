@@ -11,6 +11,7 @@ import Wallet from '@project-serum/sol-wallet-adapter';
 import { Button, Input, Text, Spacer } from "@nextui-org/react";
 
 
+
 const WalletDisconnectButtonDynamic = dynamic(
     async () => (await import('@solana/wallet-adapter-react-ui')).WalletDisconnectButton,
     { ssr: false }
