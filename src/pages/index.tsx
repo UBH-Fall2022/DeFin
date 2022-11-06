@@ -49,6 +49,12 @@ const Home: NextPage = () => {
         const signature = await wallet.sendTransaction(transaction, connection, { minContextSlot });
 
         await connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature });
+
+        //Write a return notification saying payment succesful to Sender
+        //
+
+        (document.getElementById('Sender') as HTMLInputElement).value = '';
+        (document.getElementById('Amount') as HTMLInputElement).value = '';
     }, [wallet.publicKey, wallet.sendTransaction, connection]);
 
     if(wallet.connected){
