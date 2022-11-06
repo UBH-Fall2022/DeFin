@@ -10,6 +10,7 @@ import { Keypair, SystemProgram, Transaction, PublicKey } from '@solana/web3.js'
 import Wallet from '@project-serum/sol-wallet-adapter';
 import { Button, Input, Text, Spacer, Modal, useModal, Navbar, Row, Checkbox } from "@nextui-org/react";
 
+<<<<<<< HEAD
 // import Pool to access node postgresql
 
 import { Client } from 'pg';
@@ -55,6 +56,8 @@ function storeSender(pub: PublicKey) {
 */
 
 
+=======
+>>>>>>> 9578cc81bd9a15a08f5f791724bbd180c40b0f2f
 // end of storeSender function
 const WalletDisconnectButtonDynamic = dynamic(
     async () => (await import('@solana/wallet-adapter-react-ui')).WalletDisconnectButton,
@@ -100,8 +103,11 @@ const Home: NextPage = () => {
 
         (document.getElementById('Sender') as HTMLInputElement).value = '';
         (document.getElementById('Amount') as HTMLInputElement).value = '';
+<<<<<<< HEAD
         // hopefully stores the user id
         //storeSender(wallet.publicKey);
+=======
+>>>>>>> 9578cc81bd9a15a08f5f791724bbd180c40b0f2f
     }, [wallet.publicKey, wallet.sendTransaction, connection]);
 
 
