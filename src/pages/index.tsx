@@ -156,9 +156,8 @@ const Home: NextPage = () => {
         css={{
           textGradient: "45deg, $blue600 -20%, $pink600 50%",
         }}
-        weight="bold"
-      >
-                    Hey, it's <a>DePay!</a>
+        weight="bold">
+                    Welcome to DePay!
                 </Text>
 
                 <Spacer y={1} />
@@ -196,8 +195,7 @@ const Home: NextPage = () => {
         closeButton
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
-        {...bindings}
-      >
+        {...bindings}>
         <Modal.Header>
           <Text id="modal-title" size="$xl">
             This is your Public Key:
